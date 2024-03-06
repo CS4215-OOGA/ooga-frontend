@@ -1,0 +1,36 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+
+# testing
+/coverage
+
+# production
+/build
+src/styles/*.css
+/.env
+
+# deployment
+terraform*
+
+# sourceror bundle
+/public/externalLibs/sourceror
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.idea/
+.vscode/
+cadet-frontend.iml
+
+npm-debug.log*
+.eslintcache
+yarn-error.log
+
+# emacs backup files
+
+*~
