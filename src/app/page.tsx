@@ -58,7 +58,7 @@ const HomePage = () => {
     const blob = new Blob([editorValue ?? ''], { type: 'text/plain;charset=utf-8' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = 'editorContent.txt';
+    link.download = 'editorContent.ooga';
     link.click();
     URL.revokeObjectURL(link.href);
   };
