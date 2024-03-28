@@ -15,14 +15,32 @@ const HomePage = () => {
     setEditorValue(editorValue);
   }, []);
 
-  const handleRun = () => {
-    console.log('Breakpoints at lines:', breakpoints);
-    setOutput(editorValue);
+  const handleRun = async () => {
+    // Assuming editorValue is already filled with the code from MonacoEditor
+    try {
+      const response = await fetch('http://localhost:3001/run', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: editorValue })
+      });
+      const { success, output, error } = await response.json();
+
+      if (success) {
+        setOutput(output);
+      } else {
+        setOutput(`Error: ${error}`);
+      }
+    } catch (error) {
+      console.error('Error calling ooga-lang service:', error);
+      setOutput(`Error: Unable to call the ooga-lang service`);
+    }
   };
+
   const handleEditorChange = (value: string | undefined) => {
     // save to local storage
     localStorage.setItem('editorValue', value || '');
     setEditorValue(value);
+    console.log(value);
   };
 
   const handleOpenFile = (event: React.ChangeEvent<HTMLInputElement>) => {
