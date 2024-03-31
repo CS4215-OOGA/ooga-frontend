@@ -17,6 +17,7 @@ const HomePage = () => {
 
   const handleRun = async () => {
     // Assuming editorValue is already filled with the code from MonacoEditor
+    setOutput('Running...');
     try {
       const response = await fetch('http://localhost:3001/run', {
         method: 'POST',
