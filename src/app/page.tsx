@@ -42,8 +42,12 @@ const HomePage = () => {
 
   const GuideView = () => {
   return (
-    <div className={"flex items-center justify-center h-full"}>
-      <div className="p-4 max-w-2xl">
+    <div
+      className={"relative flex items-center justify-center min-h-screen bg-cover bg-center"}
+      style={{ backgroundImage: "url('/turtleofdoom.jpg')"}}
+    >
+      <div className={"absolute inset-0 bg-cover bg-center"}></div>
+      <div className="relative p-4 max-w-2xl bg-black bg-opacity-80 rounded shadow">
         <h1 className="text-2xl font-bold mb-4">Ooga Academy: Ooga manual</h1>
         <ol className="list-decimal pl-6">
           <li className="mb-2">
@@ -270,7 +274,7 @@ const HomePage = () => {
           </div>
         </div>
       ) : (
-        <div className={`flex flex-1 items-center justify-center`}><GuideView></GuideView></div>
+        <div><GuideView></GuideView></div>
       )}
     </div>
   );
