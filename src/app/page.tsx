@@ -154,7 +154,7 @@ const HomePage = () => {
         </button>
         {isDebugMode && (
           <>
-            <div className="mx-4 w-0.5 h-6 bg-gray-400"></div> {/* Divider */}
+            <div className="mx-4 w-0.5 bg-gray-400 h-8"></div> {/* Divider */}
             <div className="flex overflow-x-scroll space-x-2">{breakpointsButtons()}</div>
           </>
         )}
