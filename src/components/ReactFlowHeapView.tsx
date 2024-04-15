@@ -49,20 +49,6 @@ function CustomNode({ data, isConnectable }) {
   );
 }
 
-function TitleNode({ data }) {
-  return (
-    <div
-      className={`p-2 rounded-md flex items-center justify-center underline text-xl`}
-      style={{
-        color: data.isCurrent ? 'yellow' : 'white',
-        width: '200px'
-      }}
-    >
-      {data.label}
-    </div>
-  );
-}
-
 function HeapView({ data }) {
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
@@ -162,8 +148,7 @@ function HeapView({ data }) {
   };
 
   const nodeTypes = {
-    custom: CustomNode,
-    title: TitleNode
+    custom: CustomNode
   };
 
   return (
