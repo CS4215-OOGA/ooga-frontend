@@ -20,8 +20,6 @@ const HomePage = () => {
   const [breakpoints, setBreakpoints] = useState<number[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [modeType, setMode] = useState<Mode>(Mode.EDITOR);
-  const [isGuideMode, setIsGuideMode] = useState(false);
-  const [isDebugMode, setIsDebugMode] = useState(false);
   const [heaps, setHeaps] = useState([]);
   const [stacks, setStacks] = useState([]);
   const [selectedBreakpoint, setSelectedBreakpoint] = useState(0); // New state
