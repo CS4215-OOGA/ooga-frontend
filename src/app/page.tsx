@@ -74,6 +74,13 @@ const HomePage = () => {
           <li className="mb-2">
             Breakpoints will display the heap contents at that point of execution as well as the state for each thread.
           </li>
+          <li className="mb-2">
+            The currently supported list of standard library functions includes the WaitGroup, fmt.PrintLn and Mutexes.
+          </li>
+          <li className="mb-2">
+            Have fun coding!
+          </li>
+
         </ol>
       </div>
     </div>
