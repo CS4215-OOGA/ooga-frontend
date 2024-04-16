@@ -2,7 +2,8 @@
 import React from 'react';
 import Editor, { useMonaco } from '@monaco-editor/react';
 
-const MonacoOutput = ({ content }: { content: string | undefined }) => {
+const MonacoOutput = ({ content, isError }: { content: string | undefined; isError: boolean }) => {
+  console.log(isError);
   return (
     <Editor
       height="100%"
@@ -21,7 +22,8 @@ const MonacoOutput = ({ content }: { content: string | undefined }) => {
         selectionHighlight: false,
         hover: { enabled: false },
         contextmenu: false,
-        automaticLayout: true // Ensure layout adjusts to container
+        automaticLayout: true, // Ensure layout adjusts to container
+        extraEditorClassName: isError ? 'text-red-500' : ''
       }}
     />
   );

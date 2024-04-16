@@ -10,21 +10,24 @@ function CustomNode({ data, isConnectable }) {
     .split('\n')
     .map(line => line.trim());
 
+  // color is off white
   let backgroundColor = '#f4f0e0';
 
   if (data.isSelected) {
     if (data.isParent) {
+      // color is green
       backgroundColor = '#BEF0BA';
     } else if (data.isCurrent) {
-      // light blue for current node
+      // color is yellow
       backgroundColor = '#A7C7E7';
     } else {
+      // color is red
       backgroundColor = '#FF7770';
     }
   }
   return (
     <div
-      className={` p-2 rounded-md flex flex-col items-center justify-center text-black`}
+      className={`p-2 rounded-md flex flex-col items-center justify-center text-black`}
       style={{
         background: backgroundColor,
         width: '200px'

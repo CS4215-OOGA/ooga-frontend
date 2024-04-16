@@ -2,15 +2,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MonacoEditor from '../components/MonacoEditor';
 import MonacoOutput from '../components/MonacoOutput';
-import ReactFlow, { Edge } from 'reactflow';
-import DebugFlow from '@/components/ReactFlowStackView';
 import StackView from '@/components/ReactFlowStackView';
 import HeapView from '@/components/ReactFlowHeapView';
 
 enum Mode {
-  DEBUG = "DEBUG",
-  EDITOR = "EDITOR",
-  GUIDE = "GUIDE",
+  DEBUG = 'DEBUG',
+  EDITOR = 'EDITOR',
+  GUIDE = 'GUIDE'
 }
 
 const HomePage = () => {
@@ -23,6 +21,7 @@ const HomePage = () => {
   const [heaps, setHeaps] = useState([]);
   const [stacks, setStacks] = useState([]);
   const [selectedBreakpoint, setSelectedBreakpoint] = useState(0); // New state
+  const [isError, setIsError] = useState(false);
 
   const defaultCode = 'fmt.Println("Hello, World!")';
 
@@ -39,52 +38,61 @@ const HomePage = () => {
   };
 
   const GuideView = () => {
-  return (
-    <div
-      className={"relative flex items-center justify-center min-h-screen bg-cover bg-center"}
-      style={{ backgroundImage: "url('/turtleofdoom.jpg')"}}
-    >
-      <div className={"absolute inset-0 bg-cover bg-center"}></div>
-      <div className="relative p-4 max-w-2xl bg-black bg-opacity-80 rounded shadow">
-        <h1 className="text-2xl font-bold mb-4">Ooga Academy: Ooga manual</h1>
-        <ol className="list-decimal pl-6">
-          <li className="mb-2">
-            Welcome fellow Ooga Booga! The Ooga Academy is where you will practice your programming skills to overthrow the Source Academy!
-          </li>
-          <li className="mb-2">
-            You can type your code directly in the editor or open an existing file using the "Open File" button.
-          </li>
-          <li className="mb-2">
-            The editor supports syntax highlighting and code completion for the Ooga language.
-          </li>
-          <li className="mb-2">
-            To run your code, click the "Run" button or press Shift + Enter.
-          </li>
-          <li className="mb-2">
-            The output of your code will be displayed in the output panel on the right side of the editor.
-          </li>
-          <li className="mb-2">
-            You can save your code to a file using the "Save to File" button.
-          </li>
-          <li className="mb-2">
-            To set breakpoints, put the `breakpoint;` instruction in your program and then run it.
-          </li>
-          <li className="mb-2">
-            Breakpoints will display the heap contents at that point of execution as well as the state for each thread.
-          </li>
-          <li className="mb-2">
-            The currently supported list of standard library functions includes the WaitGroup, fmt.PrintLn and Mutexes.
-          </li>
-          <li className="mb-2">
-            Have fun coding!
-          </li>
-
-        </ol>
+    return (
+      <div
+        className="flex items-center justify-center bg-cover bg-center"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('/turtleofdoom.jpg')",
+          minHeight: `calc(100vh - 64px)` // Adjusting for header height
+        }}
+      >
+        <div className="p-4 w-full max-w-2xl bg-black bg-opacity-40 rounded shadow overflow-auto">
+          <h1 className="text-2xl font-bold mb-4">Ooga Academy: Ooga Manual</h1>
+          <ol className="list-decimal pl-6 space-y-4">
+            <li>
+              Welcome fellow Ooga Booga! The Ooga Academy is where you will practice your
+              programming skills to overthrow the Source Academy!
+            </li>
+            <li>
+              You can type your code directly in the editor or open an existing file using the "Open
+              File" button.
+            </li>
+            <li>
+              The editor supports syntax highlighting and code completion for the Ooga language.
+            </li>
+            <li>To run your code, click the "Run" button or press Shift + Enter.</li>
+            <li>
+              The output of your code will be displayed in the output panel on the right side of the
+              editor.
+            </li>
+            <li>You can save your code to a file using the "Save to File" button.</li>
+            <li>
+              To set breakpoints, put the `breakpoint;` instruction in your program and then run it.
+            </li>
+            <li>
+              Breakpoints will display the heap contents at that point of execution as well as the
+              state for each thread.
+            </li>
+            <li>
+              The stack view displays the contents of the operand stash and the runtime stack for
+              all threads, with the current thread highlighted in yellow.
+            </li>
+            <li>
+              The heap view displays the contents of the heap at the current breakpoint. Clicking on
+              a node in this view will highlight it in blue, its parents recursively in green and
+              its children recursively in red.
+            </li>
+            <li>
+              The currently supported list of standard library functions includes the WaitGroup,
+              fmt.PrintLn and Mutexes.
+            </li>
+            <li>Have fun coding!</li>
+          </ol>
+        </div>
       </div>
-    </div>
-  );
-};
-
+    );
+  };
 
   useEffect(() => {
     const editorValue = localStorage.getItem('editorValue') || defaultCode;
@@ -92,7 +100,6 @@ const HomePage = () => {
   }, []);
 
   const handleRun = async () => {
-    // Assuming editorValue is already filled with the code from MonacoEditor
     setOutput('Running...');
     try {
       const response = await fetch('http://localhost:3001/run', {
@@ -107,12 +114,16 @@ const HomePage = () => {
         setOutput(output);
         setHeaps(heaps);
         setStacks(stacks);
+        setIsError(false);
       } else {
-        setOutput(`Error: ${error}`);
+        console.log(error);
+        setOutput(`${error}`);
+        setIsError(true);
       }
     } catch (error) {
       console.error('Error calling ooga-lang service:', error);
       setOutput(`Error: Unable to call the ooga-lang service`);
+      setIsError(true);
     }
   };
 
@@ -251,7 +262,7 @@ const HomePage = () => {
             className={`flex flex-1 ${isSideBySide ? 'h-full w-1/2' : 'w-full'}`}
             style={{ minHeight: isSideBySide ? 'auto' : '50%' }}
           >
-            <MonacoOutput content={output} />
+            <MonacoOutput content={output} isError={isError} />
           </div>
         </div>
       ) : modeType === Mode.DEBUG ? (
@@ -279,7 +290,9 @@ const HomePage = () => {
           </div>
         </div>
       ) : (
-        <div><GuideView></GuideView></div>
+        <div className="h-full">
+          <GuideView></GuideView>
+        </div>
       )}
     </div>
   );
