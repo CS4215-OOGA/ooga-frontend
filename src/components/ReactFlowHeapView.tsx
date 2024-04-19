@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ReactFlow, { Controls, Background, Handle, Position } from 'reactflow';
 import 'reactflow/dist/style.css';
 
@@ -52,10 +52,10 @@ function CustomNode({ data, isConnectable }) {
   );
 }
 
-function HeapView({ data }) {
+function HeapView({ data, selectedElement }) {
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
-
+  const prevSelectedElementRef = useRef(null);
   useEffect(() => {
     let localNodes = [];
     let localEdges = [];
@@ -108,9 +108,27 @@ function HeapView({ data }) {
     setEdges(localEdges);
   }, [data]);
 
+  useEffect(() => {
+    if (
+      selectedElement &&
+      (!prevSelectedElementRef.current ||
+        selectedElement.data.address !== prevSelectedElementRef.current.data.address)
+    ) {
+      console.log('Trying to find element with address: ', selectedElement.data.address);
+      const selectedNode = nodes.find(
+        node => node.data.element.address === selectedElement.data.address
+      );
+      console.log(selectedNode);
+      if (selectedNode) {
+        onElementClick(null, selectedNode);
+        prevSelectedElementRef.current = selectedElement;
+      }
+    }
+  }, [selectedElement, nodes]);
+
   const onElementClick = (event, element) => {
     // Helper function to recursively toggle selection status
-    const isSelected = !element.data.isSelected;
+    const isSelected = true;
 
     const toggleChildren = element => {
       element.data.isSelected = isSelected;

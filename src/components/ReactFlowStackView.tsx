@@ -96,7 +96,8 @@ function createNodesAndEdges(data, startX, threadIndex, isCurrent) {
           `,
           isCurrent,
           hideTopHandle: i === 0,
-          hideBottomHandle: i === data[type.toLowerCase()].length - 1
+          hideBottomHandle: i === data[type.toLowerCase()].length - 1,
+          address: item.address
         },
         position: { x: startX + idx * 300 - 150, y: yOffset + 120 * (i + 1) },
         type: 'custom'
@@ -114,7 +115,7 @@ function createNodesAndEdges(data, startX, threadIndex, isCurrent) {
   return { nodes, edges };
 }
 
-function StackView({ data, currentThreadIndex }) {
+function StackView({ data, currentThreadIndex, onStackElementClick }) {
   console.log(data);
   console.log(currentThreadIndex);
   const [nodes, setNodes] = useState([]);
@@ -142,7 +143,9 @@ function StackView({ data, currentThreadIndex }) {
 
   const onElementClick = (event, element) => {
     const updatedNodes = nodes.map(node => {
+      node.data.isSelected = false; // Deselect all nodes
       if (node.id === element.id) {
+        onStackElementClick(node);
         return {
           ...node,
           data: {

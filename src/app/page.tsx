@@ -2,8 +2,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MonacoEditor from '../components/MonacoEditor';
 import MonacoOutput from '../components/MonacoOutput';
-import StackView from '@/components/ReactFlowStackView';
-import HeapView from '@/components/ReactFlowHeapView';
+import StackView from '../components/ReactFlowStackView';
+import HeapView from '../components/ReactFlowHeapView';
 
 enum Mode {
   DEBUG = 'DEBUG',
@@ -22,9 +22,13 @@ const HomePage = () => {
   const [stacks, setStacks] = useState([]);
   const [selectedBreakpoint, setSelectedBreakpoint] = useState(0); // New state
   const [isError, setIsError] = useState(false);
+  const [selectedElement, setSelectedElement] = useState(null);
 
   const defaultCode = 'fmt.Println("Hello, World!")';
-
+  const handleStackElementClick = element => {
+    console.log(element);
+    setSelectedElement(element);
+  };
   const setEditorMode = () => {
     setMode(Mode.EDITOR);
   };
@@ -280,13 +284,17 @@ const HomePage = () => {
               currentThreadIndex={
                 stacks.length > 0 ? stacks[selectedBreakpoint].currentThread : null
               }
+              onStackElementClick={handleStackElementClick}
             />
           </div>
           <div
             className={`flex flex-1 ${isSideBySide ? 'h-full w-1/2' : 'w-full'}`}
             style={{ minHeight: isSideBySide ? 'auto' : '50%' }}
           >
-            <HeapView data={heaps.length > 0 ? heaps[selectedBreakpoint] : []} />
+            <HeapView
+              data={heaps.length > 0 ? heaps[selectedBreakpoint] : []}
+              selectedElement={selectedElement}
+            />
           </div>
         </div>
       ) : (
