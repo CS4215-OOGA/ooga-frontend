@@ -18,8 +18,6 @@ This is the frontend for the Ooga programming language playground. It provides a
   - [MonacoOutput](#monacooutput)
   - [ReactFlowStackView](#reactflowstackview)
   - [ReactFlowHeapView](#reactflowheapview)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
